@@ -2,7 +2,7 @@ services:
   - type: web
     name: template-api-go
     env: go
-    buildCommand: go build -o app
+    buildCommand: go build -tags netgo -ldflags '-s -w' -o app
     startCommand: ./app
     envVars:
       - key: DATABASE_URL
