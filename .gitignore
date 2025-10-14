@@ -1,0 +1,19 @@
+# Binaries
+/app
+*.exe
+*.out
+
+# Build directories
+bin/
+pkg/
+
+# Dependencies
+vendor/
+
+# Environment files
+.env
+
+# IDE / editor stuff
+.vscode/
+.idea/
+*.swp
