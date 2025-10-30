@@ -1,0 +1,26 @@
+name: Keep Alive - Prevent Cold Start Render
+
+on:
+  schedule:
+    # every 10 minutes (every 15 minutes of inactivity instance goes cold)
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  keep-alive-service:
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Configure url
+        run: echo "TARGET_URL=https://template-api-go.onrender.com/todos" >> $GITHUB_ENV
+
+      - name: Send request to Render API
+        run: |
+          # -sS: Silent, display only errors
+          # -o /dev/null: ignore output
+          # -w "%{time_total}\n": format output: request time in seconds
+          TIME_TAKEN=$(curl -sS -o /dev/null -w "%{time_total}\n" ${TARGET_URL})
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${TARGET_URL})
+          echo "------------------------------------------------------"
+          echo "Ping: ${TARGET_URL}"
+          echo "HTTP status: ${STATUS_CODE}"
+          echo "Response time: ${TIME_TAKEN} seconds"
